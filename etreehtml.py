@@ -13,14 +13,12 @@ class EtreeHtmlParser(HTMLParser):
 		assert html
 		self._target = target
 		self._tags = []
-
 	def handle_starttag(self, tag, attrs):
 		self._target.start(tag, dict(attrs))
 		if tag in EMPTY_ELEMENTS:
 			self._target.end(tag)
 		else:
 			self._tags.append(tag)
-
 	def handle_endtag(self, tag):
 		if len(self._tags) > 0 and tag == self._tags[-1]:
 			self._tags.pop()
@@ -34,18 +32,14 @@ class EtreeHtmlParser(HTMLParser):
 			else:
 				return # Ignore a closed tag that hasn't been opened
 		self._target.end(tag)
-
 	def close(self):
 		HTMLParser.close(self)
 		for t in reversed(self._tags):
 			self._target.end(t)
 		return self._target.close()
-
 	def handle_data(self, data):
 		self._target.data(data)
-
 def parses(html):
 	return parse(StringIO.StringIO(html))
-
 def parse(htmlf):
 	return xml.etree.ElementTree.parse(htmlf, EtreeHtmlParser())
