@@ -45,7 +45,11 @@ class _EtreeHtmlParser(HTMLParser):
 		return self._target.close()
 	def handle_data(self, data):
 		self._target.data(data)
-def parseHTML(htmlf):
+def parseHTMLFile(htmlf):
 	return xml.etree.ElementTree.parse(htmlf, _EtreeHtmlParser())
-def parseHTMLs(html):
-	return parseHTML(StringIO(html))
+def parseHTML(html):
+	return parseHTMLFile(StringIO(html))
+
+def etree_text(enode):
+	""" Utility function that extracts the total text of an element """
+	return enode.text + ''.join(cenode.tail for cenode in enode)
